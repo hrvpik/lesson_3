@@ -1,6 +1,7 @@
 class Train
-  attr_accessor  :type, :speed, :cout_vagon, :route, :station, :number
-  
+
+attr_accessor  :type, :speed, :cout_vagon, :route, :station, :current_station
+
   def initialize(number, type , cout_vagon)
     @number = number
     @cout_vagon = cout_vagon
@@ -29,7 +30,7 @@ class Train
    if @speed == 0
    @cout_vagon = cout_vagon + 1
    else @speed != 0
-    puts "Прицепка невозможна поезд движется"
+   puts "Прицепка невозможна поезд движется"
    end
   end
 
@@ -37,8 +38,34 @@ class Train
     if @speed == 0
     @cout_vagon = cout_vagon - 1
     else @speed != 0
-     puts "Отцепка невозможна поезд движется"
+    puts "Отцепка невозможна поезд движется"
     end
-    
   end
+
+  def set_route(route)
+    @route = route
+    @current_station = route.stations[0]
+    @current_station.admission_train(self)
+  end
+
+  def go_next_station
+    @current_station.dispatch_train(self)
+    @current_station = @route.stations[@route.stations.index(@current_station)+1]
+    @current_station.admission_train(self)    
+  end
+
+  def go_prev_station
+    @current_station.dispatch_train(self)
+    @current_station = @route.stations[@route.stations.index(@current_station)-1]
+    @current_station.admission_train(self)    
+  end
+
+  def next_station
+    @route.stations[@route.stations.index(@current_station)+1]
+  end
+
+  def prev_station
+    @route.stations[@route.stations.index(@current_station)-1]
+  end
+      
 end
